@@ -8,6 +8,6 @@ public class TraveLogApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TraveLogApplication.class, args);
+        System.out.println("[check] hi TraveLog");
     }
-
 }
