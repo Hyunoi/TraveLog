@@ -20,7 +20,7 @@ public class UserService {
         if (userRepository.existsUserByEmail(request.email()))
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL);
 
-        if (userRepository.existsUserByUsername(request.nickname()))
+        if (userRepository.existsUserByNickname(request.nickname()))
             throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
 
         String encodePassword = passwordEncoder.encode(request.password());
