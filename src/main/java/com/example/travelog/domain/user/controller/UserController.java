@@ -2,8 +2,10 @@ package com.example.travelog.domain.user.controller;
 
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
 import com.example.travelog.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @RequestMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody UserSignUpRequest request) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@Valid @RequestBody UserSignUpRequest request) {
         userService.signUp(request);
         return ResponseEntity.ok().build();
     }
