@@ -1,5 +1,6 @@
 package com.example.travelog.global.jwt;
 
+import com.example.travelog.domain.user.entity.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,12 @@ public class JwtTokenProvider {
     }
 
     // AccessToken 생성
-    public String createAccessToken(String email) {
+    public String createAccessToken(String email, Role role) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("role", role.name());
+
         return Jwts.builder()
-                .setSubject(email)
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
                 .signWith(createKey(), SignatureAlgorithm.HS256)
