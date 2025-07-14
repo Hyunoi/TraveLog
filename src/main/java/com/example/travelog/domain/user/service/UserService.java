@@ -45,12 +45,19 @@ public class UserService {
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
 
-        String accessToken = jwtTokenProvider.createAccessToken(request.email());
+        String accessToken = jwtTokenProvider.createAccessToken(request.email(), Role.USER);
         String refreshToken = jwtTokenProvider.createRefreshToken(request.email());
 
         userRedisService.setRefreshToken(request.email(), refreshToken);
 
         return new UserLoginResponse(accessToken, refreshToken);
+    }
 
+    public void logOut(String accessToken) {
+        if (accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
+        }
+        String email = jwtTokenProvider.getEmailfromToken(accessToken);
+        userRedisService.deleteRefreshToken(email);
     }
 }
