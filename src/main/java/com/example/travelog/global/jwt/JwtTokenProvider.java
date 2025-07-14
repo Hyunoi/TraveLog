@@ -74,7 +74,17 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    // 인증 정보 반환
+    // 토큰으로 Role 알아내기
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(createKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return (String) claims.get("role");
+    }
+    
     public Authentication getAuthentication(String token) {
         // 사용자 정보 추출
         Claims claims = parseClaims(token);
