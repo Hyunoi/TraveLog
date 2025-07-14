@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -86,15 +88,16 @@ public class JwtTokenProvider {
     }
     
     public Authentication getAuthentication(String token) {
-        // 사용자 정보 추출
-        Claims claims = parseClaims(token);
-        String email = claims.getSubject();
-        String role = claims.get("role", String.class);
+        String email = getEmailfromToken(token);
+        String role = getRoleFromToken(token);
 
-        // 권한 설정
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+        UserDetails userDetails = new User(
+                email,
+                "",
+                Collections.singleton(new SimpleGrantedAuthority(role))
+        );
 
-        return new UsernamePasswordAuthenticationToken(email, null, Collections.singleton(authority));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     private Claims parseClaims(String token) {
