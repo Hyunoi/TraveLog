@@ -8,8 +8,9 @@ import com.example.travelog.domain.user.dto.response.UserMyPageResponse;
 import com.example.travelog.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,21 +32,21 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logOut(@RequestHeader("Authorization") String accessToken) {
-        userService.logOut(accessToken);
+    public ResponseEntity<?> logOut(@AuthenticationPrincipal UserDetails userDetails) {
+        userService.logOut(userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/mypage")
-    public ResponseEntity<UserMyPageResponse> getMyPage(@RequestHeader("Authorization") String accessToken) {
-        UserMyPageResponse response = userService.getMyPage(accessToken);
+    public ResponseEntity<UserMyPageResponse> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
+        UserMyPageResponse response = userService.getMyPage(userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request,
-                              @RequestHeader("Authorization") String accessToken) {
-        userService.updateProfile(request, accessToken);
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        userService.updateProfile(request, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
 }

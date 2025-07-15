@@ -56,13 +56,11 @@ public class UserService {
         return new UserLoginResponse(accessToken, refreshToken);
     }
 
-    public void logOut(String accessToken) {
-        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+    public void logOut(String email) {
         userRedisService.deleteRefreshToken(email);
     }
 
-    public UserMyPageResponse getMyPage(String accessToken) {
-        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+    public UserMyPageResponse getMyPage(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
 
@@ -70,8 +68,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(UserProfileRequest request, String accessToken) {
-        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+    public void updateProfile(UserProfileRequest request, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
 
