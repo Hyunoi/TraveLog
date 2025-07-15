@@ -20,6 +20,7 @@ public class User extends BaseTimeEntity {
 
     private String password;
     private String nickname;
+    private String profileUrl;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -33,5 +34,13 @@ public class User extends BaseTimeEntity {
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String imageUrl) {
+        this.profileUrl = imageUrl;
+    }
+
+    public void deleteProfileImage() {
+        this.profileUrl = null;
     }
 }
