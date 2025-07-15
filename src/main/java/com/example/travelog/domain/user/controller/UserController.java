@@ -3,6 +3,7 @@ package com.example.travelog.domain.user.controller;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
 import com.example.travelog.domain.user.dto.response.UserLoginResponse;
+import com.example.travelog.domain.user.dto.response.UserMyPageResponse;
 import com.example.travelog.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,11 @@ public class UserController {
     public ResponseEntity<?> logOut(@RequestHeader("Authorization") String accessToken) {
         userService.logOut(accessToken);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserMyPageResponse> getMyPage(@RequestHeader("Authorization") String accessToken) {
+        UserMyPageResponse response = userService.getMyPage(accessToken);
+        return ResponseEntity.ok(response);
     }
 }

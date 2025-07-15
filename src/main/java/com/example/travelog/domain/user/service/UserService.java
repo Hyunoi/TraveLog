@@ -58,6 +58,15 @@ public class UserService {
         String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
         userRedisService.deleteRefreshToken(email);
     }
+
+    public UserMyPageResponse getMyPage(String accessToken) {
+        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        return new UserMyPageResponse(user.getEmail(), user.getNickname());
+    }
+
     private String deleteBearer(String accessToken) {
         if (accessToken.startsWith("Bearer ")) {
             accessToken = accessToken.substring(7);
