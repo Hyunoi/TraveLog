@@ -3,6 +3,7 @@ package com.example.travelog.domain.user.service;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
 import com.example.travelog.domain.user.dto.response.UserLoginResponse;
+import com.example.travelog.domain.user.dto.response.UserMyPageResponse;
 import com.example.travelog.domain.user.entity.Role;
 import com.example.travelog.domain.user.entity.User;
 import com.example.travelog.domain.user.repository.UserRepository;
@@ -54,10 +55,13 @@ public class UserService {
     }
 
     public void logOut(String accessToken) {
+        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+        userRedisService.deleteRefreshToken(email);
+    }
+    private String deleteBearer(String accessToken) {
         if (accessToken.startsWith("Bearer ")) {
             accessToken = accessToken.substring(7);
         }
-        String email = jwtTokenProvider.getEmailfromToken(accessToken);
-        userRedisService.deleteRefreshToken(email);
+        return accessToken;
     }
 }
