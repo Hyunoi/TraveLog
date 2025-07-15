@@ -1,6 +1,7 @@
 package com.example.travelog.domain.user.service;
 
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
+import com.example.travelog.domain.user.dto.request.UserProfileRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
 import com.example.travelog.domain.user.dto.response.UserLoginResponse;
 import com.example.travelog.domain.user.dto.response.UserMyPageResponse;
@@ -10,6 +11,7 @@ import com.example.travelog.domain.user.repository.UserRepository;
 import com.example.travelog.global.exception.CustomException;
 import com.example.travelog.global.exception.ErrorCode;
 import com.example.travelog.global.jwt.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,20 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
 
         return new UserMyPageResponse(user.getEmail(), user.getNickname());
+    }
+
+    @Transactional
+    public void updateProfile(UserProfileRequest request, String accessToken) {
+        String email = jwtTokenProvider.getEmailfromToken(deleteBearer(accessToken));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        if (request.nickname() != null && !request.nickname().equals(user.getNickname())) {
+            if (userRepository.existsUserByNickname(request.nickname()))
+                throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
+            user.updateNickname(request.nickname());
+        }
+        userRepository.save(user);
     }
 
     private String deleteBearer(String accessToken) {
