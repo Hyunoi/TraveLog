@@ -1,14 +1,18 @@
 package com.example.travelog.domain.user.service;
 
+import com.example.travelog.domain.s3.service.S3ImageService;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
+import com.example.travelog.domain.user.dto.request.UserProfileRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
 import com.example.travelog.domain.user.dto.response.UserLoginResponse;
+import com.example.travelog.domain.user.dto.response.UserMyPageResponse;
 import com.example.travelog.domain.user.entity.Role;
 import com.example.travelog.domain.user.entity.User;
 import com.example.travelog.domain.user.repository.UserRepository;
 import com.example.travelog.global.exception.CustomException;
 import com.example.travelog.global.exception.ErrorCode;
 import com.example.travelog.global.jwt.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,11 +57,42 @@ public class UserService {
         return new UserLoginResponse(accessToken, refreshToken);
     }
 
-    public void logOut(String accessToken) {
+    public void logOut(String email) {
+        userRedisService.deleteRefreshToken(email);
+    }
+
+    public UserMyPageResponse getMyPage(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        return new UserMyPageResponse(user.getEmail(), user.getNickname());
+    }
+
+    @Transactional
+    public void updateProfile(UserProfileRequest request, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        if (request.nickname() != null && !request.nickname().equals(user.getNickname())) {
+            if (userRepository.existsUserByNickname(request.nickname()))
+                throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
+            user.updateNickname(request.nickname());
+        }
+        userRepository.save(user);
+    }
+
+    public void updateProfileImage(String imageUrl, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        if (imageUrl != null) user.updateProfileImage(imageUrl);
+        userRepository.save(user);
+    }
+
+    private String deleteBearer(String accessToken) {
         if (accessToken.startsWith("Bearer ")) {
             accessToken = accessToken.substring(7);
         }
-        String email = jwtTokenProvider.getEmailfromToken(accessToken);
-        userRedisService.deleteRefreshToken(email);
+        return accessToken;
     }
 }

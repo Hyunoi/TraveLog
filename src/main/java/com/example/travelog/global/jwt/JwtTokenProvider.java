@@ -1,25 +1,25 @@
 package com.example.travelog.global.jwt;
 
 import com.example.travelog.domain.user.entity.Role;
+import com.example.travelog.domain.user.service.CustomUserDetailService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
+    private final CustomUserDetailService customUserDetailService;
+
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -89,14 +89,8 @@ public class JwtTokenProvider {
     
     public Authentication getAuthentication(String token) {
         String email = getEmailfromToken(token);
-        String role = getRoleFromToken(token);
 
-        UserDetails userDetails = new User(
-                email,
-                "",
-                Collections.singleton(new SimpleGrantedAuthority(role))
-        );
-
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(email);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
