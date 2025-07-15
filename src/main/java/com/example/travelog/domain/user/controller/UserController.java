@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/profile")
+    @PatchMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request,
                               @RequestHeader("Authorization") String accessToken) {
         userService.updateProfile(request, accessToken);
