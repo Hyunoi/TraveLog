@@ -1,5 +1,6 @@
 package com.example.travelog.domain.user.service;
 
+import com.example.travelog.domain.s3.service.S3ImageService;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
 import com.example.travelog.domain.user.dto.request.UserProfileRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
@@ -77,6 +78,14 @@ public class UserService {
                 throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
             user.updateNickname(request.nickname());
         }
+        userRepository.save(user);
+    }
+
+    public void updateProfileImage(String imageUrl, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        if (imageUrl != null) user.updateProfileImage(imageUrl);
         userRepository.save(user);
     }
 
