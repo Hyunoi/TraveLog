@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TravelService {
-}
     private final UserRepository userRepository;
     private final TravelRepository travelRepository;
 
@@ -36,3 +35,14 @@ public class TravelService {
 
         travelRepository.save(travel);
     }
+
+    public void updateTravelThumbnail(String imageUrl, Long travelId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Travel travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+
+        if (!travel.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }

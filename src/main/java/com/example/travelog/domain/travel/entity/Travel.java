@@ -3,10 +3,15 @@ package com.example.travelog.domain.travel.entity;
 import com.example.travelog.domain.user.entity.User;
 import com.example.travelog.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
+@Builder
 public class Travel extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +23,28 @@ public class Travel extends BaseTimeEntity {
 
     private String title;
     private String description;
-    private String locaiton;
+    private String location;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private double latitude;
     private double longitude;
+    private String thumbnailUrl;
+
+    public void updateTravel(String title,
+                             String description,
+                             LocalDateTime startTime,
+                             LocalDateTime endTime) {
+        this.title = title;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public void updateThumbnailImage(String imageUrl) {
+        this.thumbnailUrl = imageUrl;
+    }
+
+    public void deleteThumbnailImage() {
+        this.thumbnailUrl = null;
+    }
 }
