@@ -3,6 +3,7 @@ package com.example.travelog.domain.travel.service;
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
 import com.example.travelog.domain.travel.dto.response.TravelListResponse;
+import com.example.travelog.domain.travel.dto.response.TravelResponse;
 import com.example.travelog.domain.travel.entity.Travel;
 import com.example.travelog.domain.travel.repository.TravelRepository;
 import com.example.travelog.domain.user.entity.User;
@@ -86,6 +87,24 @@ public class TravelService {
                         travel.getLocation(),
                         travel.getThumbnailUrl()
                 )).toList();
+    }
 
+    public TravelResponse getTravel(Long travelId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Travel travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+
+        if (!travel.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        return new TravelResponse(
+                travel.getTitle(),
+                travel.getDescription(),
+                travel.getLocation(),
+                travel.getThumbnailUrl()
+        );
     }
 }

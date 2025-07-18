@@ -4,6 +4,7 @@ import com.example.travelog.domain.s3.service.S3ImageService;
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
 import com.example.travelog.domain.travel.dto.response.TravelListResponse;
+import com.example.travelog.domain.travel.dto.response.TravelResponse;
 import com.example.travelog.domain.travel.service.TravelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,14 @@ public class TravelControllerImpl implements TravelController {
     @GetMapping()
     public ResponseEntity<List<TravelListResponse>> getTravelList(@AuthenticationPrincipal UserDetails userDetails) {
         List<TravelListResponse> response = travelService.getTravelList(userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
+    // 여행 상세 조회
+    @GetMapping("/{travelId}")
+    public ResponseEntity<TravelResponse> getTravel(@PathVariable Long travelId,
+                                                        @AuthenticationPrincipal UserDetails userDetails) {
+        TravelResponse response = travelService.getTravel(travelId, userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
 }
