@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "TRAVEL")
 public interface TravelController {
     @Operation(summary = "여행 생성")
-    public void createTravel(@Parameter(description = "여행명, 설명, 시작/종료 일자, 여행 장소 기입")
+    public ResponseEntity<?> createTravel(@Parameter(description = "여행명, 설명, 시작/종료 일자, 여행 장소 기입")
                              @Valid @RequestBody TravelCreateRequest request,
                              @AuthenticationPrincipal UserDetails userDetails);
 

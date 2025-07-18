@@ -2,6 +2,7 @@ package com.example.travelog.domain.travel.service;
 
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
+import com.example.travelog.domain.travel.dto.response.TravelListResponse;
 import com.example.travelog.domain.travel.entity.Travel;
 import com.example.travelog.domain.travel.repository.TravelRepository;
 import com.example.travelog.domain.user.entity.User;
@@ -11,6 +12,8 @@ import com.example.travelog.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -69,5 +72,20 @@ public class TravelService {
                 request.startDate(),
                 request.endDate()
         );
+    }
+
+    public List<TravelListResponse> getTravelList(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        List<Travel> travelList = travelRepository.findAllByUser(user);
+
+        return travelList.stream()
+                .map(travel -> new TravelListResponse(
+                        travel.getTitle(),
+                        travel.getLocation(),
+                        travel.getThumbnailUrl()
+                )).toList();
+
     }
 }
