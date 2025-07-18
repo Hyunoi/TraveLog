@@ -46,3 +46,28 @@ public class TravelService {
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
+
+        if (imageUrl != null) travel.updateThumbnailImage(imageUrl);
+        travelRepository.save(travel);
+    }
+
+    @Transactional
+    public void updateTravel(Long travelId, String email, TravelUpdateRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Travel travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+
+        if (!travel.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        travel.updateTravel(
+                request.title(),
+                request.description(),
+                request.startDate(),
+                request.endDate()
+        );
+    }
+}
