@@ -1,6 +1,7 @@
 package com.example.travelog.domain.travel.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -15,10 +16,10 @@ public record TravelCreateRequest(
         @NotBlank(message = "여행 위치는 필수 입력값입니다.")
         String location,
 
-        @NotBlank(message = "시작일은 필수 입력 값입니다.")
+        @NotNull(message = "시작일은 필수 입력 값입니다.")
         LocalDateTime startDate,
 
-        @NotBlank(message = "마감일은 필수 입력 값입니다.")
+        @NotNull(message = "마감일은 필수 입력 값입니다.")
         LocalDateTime endDate,
 
         double latitude,
