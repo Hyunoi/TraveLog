@@ -2,6 +2,8 @@ package com.example.travelog.domain.travel.controller;
 
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
+import com.example.travelog.domain.travel.dto.response.TravelListResponse;
+import com.example.travelog.domain.travel.dto.response.TravelResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Tag(name = "TRAVEL")
 public interface TravelController {
@@ -29,4 +33,12 @@ public interface TravelController {
                                           @PathVariable Long travelId,
                                           @RequestBody TravelUpdateRequest request,
                                           @AuthenticationPrincipal UserDetails userDetails);
+
+    @Operation(summary = "여행 목록 조회")
+    public ResponseEntity<List<TravelListResponse>> getTravelList(@AuthenticationPrincipal UserDetails userDetails);
+
+    @Operation(summary = "여행 상세 조회")
+    public ResponseEntity<TravelResponse> getTravel(@PathVariable Long travelId,
+                                                    @AuthenticationPrincipal UserDetails userDetails);
+
 }
