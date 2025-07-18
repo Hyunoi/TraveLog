@@ -61,4 +61,11 @@ public class TravelControllerImpl implements TravelController {
         TravelResponse response = travelService.getTravel(travelId, userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{travelId}")
+    public ResponseEntity<?> deleteTravel(@PathVariable Long travelId,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+        travelService.deleteTravel(travelId, userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

@@ -107,4 +107,18 @@ public class TravelService {
                 travel.getThumbnailUrl()
         );
     }
+
+    public void deleteTravel(Long travelId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Travel travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+
+        if (!travel.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        travelRepository.delete(travel);
+    }
 }

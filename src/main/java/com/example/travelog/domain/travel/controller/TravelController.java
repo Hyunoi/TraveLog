@@ -41,4 +41,7 @@ public interface TravelController {
     public ResponseEntity<TravelResponse> getTravel(@PathVariable Long travelId,
                                                     @AuthenticationPrincipal UserDetails userDetails);
 
+    @Operation(summary = "여행 삭제")
+    public ResponseEntity<?> deleteTravel(@PathVariable Long travelId,
+                                          @AuthenticationPrincipal UserDetails userDetails);
 }
