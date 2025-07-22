@@ -46,4 +46,10 @@ public class PhotoControllerImpl implements PhotoController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{photoId}")
+    public ResponseEntity<?> deletePhoto(@PathVariable Long photoId,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        photoService.deletePhoto(photoId, userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

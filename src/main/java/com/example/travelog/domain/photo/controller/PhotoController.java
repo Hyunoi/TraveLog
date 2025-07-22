@@ -35,4 +35,8 @@ public interface PhotoController {
                                          @RequestPart("request") @Valid PhotoUpdateRequest request,
                                          @RequestPart("image") MultipartFile image,
                                          @AuthenticationPrincipal UserDetails userDetails);
+
+    @Operation(summary = "사진 삭제")
+    public ResponseEntity<?> deletePhoto(@PathVariable Long photoId,
+                                         @AuthenticationPrincipal UserDetails userDetails);
 }

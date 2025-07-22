@@ -100,4 +100,18 @@ public class PhotoService {
                 request.location()
         );
     }
+
+    public void deletePhoto(Long photoId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Photo photo = photoRepository.findById(photoId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PHOTO));
+
+        if (!photo.getTravel().getUser().getEmail().equals(email)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        photoRepository.delete(photo);
+    }
 }
