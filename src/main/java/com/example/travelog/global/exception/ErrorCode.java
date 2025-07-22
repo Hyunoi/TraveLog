@@ -8,7 +8,7 @@ public enum ErrorCode {
     // User
     ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, "해당 이메일의 유저가 이미 존재합니다."),
     ALREADY_EXIST_NICKNAME(HttpStatus.CONFLICT, "해당 닉네임의 유저가 이미 존재합니다."),
-    NOT_FOUNT_USER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     FORBIDDEN_USER(HttpStatus.FORBIDDEN, "해당 유저에게 권한이 없습니다."),
 
@@ -21,7 +21,7 @@ public enum ErrorCode {
     PUT_OBJECT_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드 실패했습니다."),
 
     // Travel
-    NOT_FOUNT_TRAVEL(HttpStatus.NOT_FOUND, "해당 여행을 찾을 수 없습니다."),
+    NOT_FOUND_TRAVEL(HttpStatus.NOT_FOUND, "해당 여행을 찾을 수 없습니다."),
 
     // Photo
     NOT_FOUND_PHOTO(HttpStatus.NOT_FOUND, "해당 사진을 찾을 수 없습니다.");

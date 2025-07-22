@@ -1,6 +1,5 @@
 package com.example.travelog.domain.user.service;
 
-import com.example.travelog.domain.s3.service.S3ImageService;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
 import com.example.travelog.domain.user.dto.request.UserProfileRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;
@@ -44,7 +43,7 @@ public class UserService {
 
     public UserLoginResponse logIn(UserLogInRequest request) {
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
@@ -63,7 +62,7 @@ public class UserService {
 
     public UserMyPageResponse getMyPage(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         return new UserMyPageResponse(user.getEmail(), user.getNickname());
     }
@@ -71,7 +70,7 @@ public class UserService {
     @Transactional
     public void updateProfile(UserProfileRequest request, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         if (request.nickname() != null && !request.nickname().equals(user.getNickname())) {
             if (userRepository.existsUserByNickname(request.nickname()))
@@ -83,7 +82,7 @@ public class UserService {
 
     public void updateProfileImage(String imageUrl, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         if (imageUrl != null) user.updateProfileImage(imageUrl);
         userRepository.save(user);

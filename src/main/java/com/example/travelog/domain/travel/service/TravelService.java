@@ -24,7 +24,7 @@ public class TravelService {
 
     public void createTravel(TravelCreateRequest request, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Travel travel = Travel.builder()
                 .user(user)
@@ -42,10 +42,10 @@ public class TravelService {
 
     public void updateTravelThumbnail(String imageUrl, Long travelId, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -58,10 +58,10 @@ public class TravelService {
     @Transactional
     public void updateTravel(Long travelId, String email, TravelUpdateRequest request) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -77,7 +77,7 @@ public class TravelService {
 
     public List<TravelListReadResponse> getTravelList(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         List<Travel> travelList = travelRepository.findAllByUser(user);
 
@@ -91,10 +91,10 @@ public class TravelService {
 
     public TravelReadResponse getTravel(Long travelId, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -110,10 +110,10 @@ public class TravelService {
 
     public void deleteTravel(Long travelId, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
