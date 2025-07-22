@@ -1,6 +1,6 @@
 package com.example.travelog.domain.user.controller;
 
-import com.example.travelog.domain.s3.service.S3ImageService;
+import com.example.travelog.global.s3.service.S3ImageService;
 import com.example.travelog.domain.user.dto.request.UserLogInRequest;
 import com.example.travelog.domain.user.dto.request.UserProfileRequest;
 import com.example.travelog.domain.user.dto.request.UserSignUpRequest;

@@ -1,6 +1,6 @@
 package com.example.travelog.domain.travel.controller;
 
-import com.example.travelog.domain.s3.service.S3ImageService;
+import com.example.travelog.global.s3.service.S3ImageService;
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
 import com.example.travelog.domain.travel.dto.response.TravelListReadResponse;

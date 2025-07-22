@@ -5,7 +5,7 @@ import com.example.travelog.domain.photo.dto.request.PhotoUpdateRequest;
 import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import com.example.travelog.domain.photo.entity.Photo;
 import com.example.travelog.domain.photo.repository.PhotoRepository;
-import com.example.travelog.domain.s3.service.S3ImageService;
+import com.example.travelog.global.s3.service.S3ImageService;
 import com.example.travelog.domain.travel.entity.Travel;
 import com.example.travelog.domain.travel.repository.TravelRepository;
 import com.example.travelog.domain.user.entity.User;
