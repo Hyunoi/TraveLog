@@ -1,6 +1,7 @@
 package com.example.travelog.domain.photo.controller;
 
 import com.example.travelog.domain.photo.dto.request.PhotoCreateRequest;
+import com.example.travelog.domain.photo.dto.request.PhotoUpdateRequest;
 import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,4 +29,10 @@ public interface PhotoController {
     @Operation(summary = "사진 리스트 조회")
     public ResponseEntity<List<PhotoListReadResponse>> getPhotoList(@PathVariable Long travelId,
                                                                     @AuthenticationPrincipal UserDetails userDetails);
+
+    @Operation(summary = "사진 수정")
+    public ResponseEntity<?> updatePhoto(@PathVariable Long photoId,
+                                         @RequestPart("request") @Valid PhotoUpdateRequest request,
+                                         @RequestPart("image") MultipartFile image,
+                                         @AuthenticationPrincipal UserDetails userDetails);
 }

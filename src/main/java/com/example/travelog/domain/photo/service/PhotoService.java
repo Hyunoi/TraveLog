@@ -1,6 +1,7 @@
 package com.example.travelog.domain.photo.service;
 
 import com.example.travelog.domain.photo.dto.request.PhotoCreateRequest;
+import com.example.travelog.domain.photo.dto.request.PhotoUpdateRequest;
 import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import com.example.travelog.domain.photo.entity.Photo;
 import com.example.travelog.domain.photo.repository.PhotoRepository;
@@ -74,5 +75,29 @@ public class PhotoService {
                         photo.getLocation(),
                         photo.getCreatedAt()
                 )).toList();
+    }
+
+    @Transactional
+    public void updatePhoto(Long photoId,
+                            PhotoUpdateRequest request,
+                            MultipartFile image,
+                            String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Photo photo = photoRepository.findById(photoId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PHOTO));
+
+        if (!photo.getTravel().getUser().getEmail().equals(email)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        String photoUrl = s3ImageService.upload(image);
+
+        photo.updatePhoto(
+                request.comment(),
+                photoUrl,
+                request.location()
+        );
     }
 }

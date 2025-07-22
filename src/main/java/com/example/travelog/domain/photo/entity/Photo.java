@@ -28,4 +28,12 @@ public class Photo extends BaseTimeEntity {
 
     private String location;
     private String comment;
+
+    public void updatePhoto(String comment,
+                       String photoUrl,
+                       String location) {
+        this.comment = comment;
+        this.photoUrl = photoUrl;
+        this.location = location;
+    }
 }

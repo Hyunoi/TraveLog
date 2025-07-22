@@ -1,6 +1,7 @@
 package com.example.travelog.domain.photo.controller;
 
 import com.example.travelog.domain.photo.dto.request.PhotoCreateRequest;
+import com.example.travelog.domain.photo.dto.request.PhotoUpdateRequest;
 import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import com.example.travelog.domain.photo.service.PhotoService;
 import jakarta.validation.Valid;
@@ -35,4 +36,14 @@ public class PhotoControllerImpl implements PhotoController {
         List<PhotoListReadResponse> response = photoService.getPhotoList(travelId, userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{photoId}")
+    public ResponseEntity<?> updatePhoto(@PathVariable Long photoId,
+                                         @RequestPart("request") @Valid PhotoUpdateRequest request,
+                                         @RequestPart("image") MultipartFile image,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        photoService.updatePhoto(photoId, request, image, userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
 }
