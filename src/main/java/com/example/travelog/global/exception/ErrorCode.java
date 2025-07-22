@@ -21,8 +21,10 @@ public enum ErrorCode {
     PUT_OBJECT_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "S3에 이미지 업로드 실패했습니다."),
 
     // Travel
-    NOT_FOUNT_TRAVEL(HttpStatus.NOT_FOUND, "해당 여행을 찾을 수 없습니다.");
+    NOT_FOUNT_TRAVEL(HttpStatus.NOT_FOUND, "해당 여행을 찾을 수 없습니다."),
 
+    // Photo
+    NOT_FOUND_PHOTO(HttpStatus.NOT_FOUND, "해당 사진을 찾을 수 없습니다.");
 
     private final HttpStatus errorCode;
     private final String errorMessage;
