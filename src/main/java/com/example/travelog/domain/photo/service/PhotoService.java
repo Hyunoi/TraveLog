@@ -1,6 +1,7 @@
 package com.example.travelog.domain.photo.service;
 
 import com.example.travelog.domain.photo.dto.request.PhotoCreateRequest;
+import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import com.example.travelog.domain.photo.entity.Photo;
 import com.example.travelog.domain.photo.repository.PhotoRepository;
 import com.example.travelog.domain.s3.service.S3ImageService;
@@ -14,6 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +51,28 @@ public class PhotoService {
                 .build();
 
         photoRepository.save(photo);
+    }
+
+    public List<PhotoListReadResponse> getPhotoList(Long travelId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
+
+        Travel travel = travelRepository.findById(travelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_TRAVEL));
+
+        if (!travel.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        List<Photo> photoList = photoRepository.findAllByTravel(travel);
+
+        return photoList.stream()
+                .map(photo -> new PhotoListReadResponse(
+                        photo.getId(),
+                        photo.getComment(),
+                        photo.getPhotoUrl(),
+                        photo.getLocation(),
+                        photo.getCreatedAt()
+                )).toList();
     }
 }

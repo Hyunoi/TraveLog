@@ -1,6 +1,7 @@
 package com.example.travelog.domain.photo.controller;
 
 import com.example.travelog.domain.photo.dto.request.PhotoCreateRequest;
+import com.example.travelog.domain.photo.dto.response.PhotoListReadResponse;
 import com.example.travelog.domain.photo.service.PhotoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/photo")
@@ -24,5 +27,12 @@ public class PhotoControllerImpl implements PhotoController {
                                          @AuthenticationPrincipal UserDetails userDetails) {
         photoService.createPhoto(request, travelId, image, userDetails.getUsername());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{travelId}")
+    public ResponseEntity<List<PhotoListReadResponse>> getPhotoList(@PathVariable Long travelId,
+                                                                    @AuthenticationPrincipal UserDetails userDetails) {
+        List<PhotoListReadResponse> response = photoService.getPhotoList(travelId, userDetails.getUsername());
+        return ResponseEntity.ok(response);
     }
 }
