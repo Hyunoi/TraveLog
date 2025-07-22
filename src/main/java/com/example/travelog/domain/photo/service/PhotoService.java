@@ -23,8 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PhotoService {
-    private final UserRepository userRepository;
-    private final TravelRepository travelRepository;
     private final S3ImageService s3ImageService;
     private final PhotoRepository photoRepository;
     private final EntityValidator entityValidator;

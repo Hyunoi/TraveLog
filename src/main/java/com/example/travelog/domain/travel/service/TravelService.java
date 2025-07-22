@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TravelService {
-    private final UserRepository userRepository;
     private final TravelRepository travelRepository;
     private final EntityValidator entityValidator;
 
