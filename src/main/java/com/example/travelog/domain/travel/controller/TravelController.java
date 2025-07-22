@@ -2,8 +2,8 @@ package com.example.travelog.domain.travel.controller;
 
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
-import com.example.travelog.domain.travel.dto.response.TravelListResponse;
-import com.example.travelog.domain.travel.dto.response.TravelResponse;
+import com.example.travelog.domain.travel.dto.response.TravelListReadResponse;
+import com.example.travelog.domain.travel.dto.response.TravelReadResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,11 +35,11 @@ public interface TravelController {
                                           @AuthenticationPrincipal UserDetails userDetails);
 
     @Operation(summary = "여행 목록 조회")
-    public ResponseEntity<List<TravelListResponse>> getTravelList(@AuthenticationPrincipal UserDetails userDetails);
+    public ResponseEntity<List<TravelListReadResponse>> getTravelList(@AuthenticationPrincipal UserDetails userDetails);
 
     @Operation(summary = "여행 상세 조회")
-    public ResponseEntity<TravelResponse> getTravel(@PathVariable Long travelId,
-                                                    @AuthenticationPrincipal UserDetails userDetails);
+    public ResponseEntity<TravelReadResponse> getTravel(@PathVariable Long travelId,
+                                                        @AuthenticationPrincipal UserDetails userDetails);
 
     @Operation(summary = "여행 삭제")
     public ResponseEntity<?> deleteTravel(@PathVariable Long travelId,

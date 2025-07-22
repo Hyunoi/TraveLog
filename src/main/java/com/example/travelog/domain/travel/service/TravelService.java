@@ -2,8 +2,8 @@ package com.example.travelog.domain.travel.service;
 
 import com.example.travelog.domain.travel.dto.request.TravelCreateRequest;
 import com.example.travelog.domain.travel.dto.request.TravelUpdateRequest;
-import com.example.travelog.domain.travel.dto.response.TravelListResponse;
-import com.example.travelog.domain.travel.dto.response.TravelResponse;
+import com.example.travelog.domain.travel.dto.response.TravelListReadResponse;
+import com.example.travelog.domain.travel.dto.response.TravelReadResponse;
 import com.example.travelog.domain.travel.entity.Travel;
 import com.example.travelog.domain.travel.repository.TravelRepository;
 import com.example.travelog.domain.user.entity.User;
@@ -75,21 +75,21 @@ public class TravelService {
         );
     }
 
-    public List<TravelListResponse> getTravelList(String email) {
+    public List<TravelListReadResponse> getTravelList(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
 
         List<Travel> travelList = travelRepository.findAllByUser(user);
 
         return travelList.stream()
-                .map(travel -> new TravelListResponse(
+                .map(travel -> new TravelListReadResponse(
                         travel.getTitle(),
                         travel.getLocation(),
                         travel.getThumbnailUrl()
                 )).toList();
     }
 
-    public TravelResponse getTravel(Long travelId, String email) {
+    public TravelReadResponse getTravel(Long travelId, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_USER));
 
@@ -100,7 +100,7 @@ public class TravelService {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
-        return new TravelResponse(
+        return new TravelReadResponse(
                 travel.getTitle(),
                 travel.getDescription(),
                 travel.getLocation(),
