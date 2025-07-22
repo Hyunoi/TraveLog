@@ -32,4 +32,10 @@ public class EntityValidator {
         return photoRepository.findById(photoId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PHOTO));
     }
+
+    public void validateUserMatch(Long ownerId, Long requesterId) {
+        if (!ownerId.equals(requesterId)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+    }
 }

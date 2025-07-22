@@ -34,13 +34,9 @@ public class PhotoService {
                             String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
 
         String photoUrl = s3ImageService.upload(image);
-
         Photo photo = Photo.builder()
                 .travel(travel)
                 .photoUrl(photoUrl)
@@ -54,13 +50,9 @@ public class PhotoService {
     public List<PhotoListReadResponse> getPhotoList(Long travelId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
 
         List<Photo> photoList = photoRepository.findAllByTravel(travel);
-
         return photoList.stream()
                 .map(photo -> new PhotoListReadResponse(
                         photo.getId(),
@@ -76,15 +68,11 @@ public class PhotoService {
                             PhotoUpdateRequest request,
                             MultipartFile image,
                             String email) {
-        entityValidator.validateUserByEmail(email);
+        User user = entityValidator.validateUserByEmail(email);
         Photo photo = entityValidator.validatePhotoById(photoId);
-
-        if (!photo.getTravel().getUser().getEmail().equals(email)) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(photo.getTravel().getUser().getId(), user.getId());
 
         String photoUrl = s3ImageService.upload(image);
-
         photo.updatePhoto(
                 request.comment(),
                 photoUrl,
@@ -93,13 +81,9 @@ public class PhotoService {
     }
 
     public void deletePhoto(Long photoId, String email) {
-        entityValidator.validateUserByEmail(email);
+        User user = entityValidator.validateUserByEmail(email);
         Photo photo = entityValidator.validatePhotoById(photoId);
-
-        if (!photo.getTravel().getUser().getEmail().equals(email)) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
-
+        entityValidator.validateUserMatch(photo.getTravel().getUser().getId(), user.getId());
         photoRepository.delete(photo);
     }
 }

@@ -7,9 +7,6 @@ import com.example.travelog.domain.travel.dto.response.TravelReadResponse;
 import com.example.travelog.domain.travel.entity.Travel;
 import com.example.travelog.domain.travel.repository.TravelRepository;
 import com.example.travelog.domain.user.entity.User;
-import com.example.travelog.domain.user.repository.UserRepository;
-import com.example.travelog.global.exception.CustomException;
-import com.example.travelog.global.exception.ErrorCode;
 import com.example.travelog.global.validator.EntityValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +40,7 @@ public class TravelService {
     public void updateTravelThumbnail(String imageUrl, Long travelId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
 
         if (imageUrl != null) travel.updateThumbnailImage(imageUrl);
         travelRepository.save(travel);
@@ -56,10 +50,7 @@ public class TravelService {
     public void updateTravel(Long travelId, String email, TravelUpdateRequest request) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
 
         travel.updateTravel(
                 request.title(),
@@ -71,7 +62,6 @@ public class TravelService {
 
     public List<TravelListReadResponse> getTravelList(String email) {
         User user = entityValidator.validateUserByEmail(email);
-
         List<Travel> travelList = travelRepository.findAllByUser(user);
 
         return travelList.stream()
@@ -85,10 +75,7 @@ public class TravelService {
     public TravelReadResponse getTravel(Long travelId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
 
         return new TravelReadResponse(
                 travel.getTitle(),
@@ -101,11 +88,7 @@ public class TravelService {
     public void deleteTravel(Long travelId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);
-
-        if (!travel.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
-
+        entityValidator.validateUserMatch(travel.getUser().getId(), user.getId());
         travelRepository.delete(travel);
     }
 }
