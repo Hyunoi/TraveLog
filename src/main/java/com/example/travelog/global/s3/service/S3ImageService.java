@@ -1,4 +1,4 @@
-package com.example.travelog.domain.s3.service;
+package com.example.travelog.global.s3.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
