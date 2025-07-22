@@ -11,6 +11,7 @@ import com.example.travelog.domain.user.repository.UserRepository;
 import com.example.travelog.global.exception.CustomException;
 import com.example.travelog.global.exception.ErrorCode;
 import com.example.travelog.global.jwt.JwtTokenProvider;
+import com.example.travelog.global.validator.EntityValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRedisService userRedisService;
+    private final EntityValidator entityValidator;
 
     public void signUp(UserSignUpRequest request) {
         if (userRepository.existsUserByEmail(request.email()))
@@ -42,8 +44,7 @@ public class UserService {
     }
 
     public UserLoginResponse logIn(UserLogInRequest request) {
-        User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = entityValidator.validateUserByEmail(request.email());
 
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
@@ -61,16 +62,13 @@ public class UserService {
     }
 
     public UserMyPageResponse getMyPage(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
+        User user = entityValidator.validateUserByEmail(email);
         return new UserMyPageResponse(user.getEmail(), user.getNickname());
     }
 
     @Transactional
     public void updateProfile(UserProfileRequest request, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = entityValidator.validateUserByEmail(email);
 
         if (request.nickname() != null && !request.nickname().equals(user.getNickname())) {
             if (userRepository.existsUserByNickname(request.nickname()))
@@ -81,8 +79,7 @@ public class UserService {
     }
 
     public void updateProfileImage(String imageUrl, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = entityValidator.validateUserByEmail(email);
 
         if (imageUrl != null) user.updateProfileImage(imageUrl);
         userRepository.save(user);

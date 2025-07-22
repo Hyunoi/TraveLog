@@ -10,6 +10,7 @@ import com.example.travelog.domain.user.entity.User;
 import com.example.travelog.domain.user.repository.UserRepository;
 import com.example.travelog.global.exception.CustomException;
 import com.example.travelog.global.exception.ErrorCode;
+import com.example.travelog.global.validator.EntityValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,10 @@ import java.util.List;
 public class TravelService {
     private final UserRepository userRepository;
     private final TravelRepository travelRepository;
+    private final EntityValidator entityValidator;
 
     public void createTravel(TravelCreateRequest request, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = entityValidator.validateUserByEmail(email);
 
         Travel travel = Travel.builder()
                 .user(user)
@@ -41,11 +42,8 @@ public class TravelService {
     }
 
     public void updateTravelThumbnail(String imageUrl, Long travelId, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-        Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
+        User user = entityValidator.validateUserByEmail(email);
+        Travel travel = entityValidator.validateTravelById(travelId);
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -57,11 +55,8 @@ public class TravelService {
 
     @Transactional
     public void updateTravel(Long travelId, String email, TravelUpdateRequest request) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-        Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
+        User user = entityValidator.validateUserByEmail(email);
+        Travel travel = entityValidator.validateTravelById(travelId);
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -76,8 +71,7 @@ public class TravelService {
     }
 
     public List<TravelListReadResponse> getTravelList(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = entityValidator.validateUserByEmail(email);
 
         List<Travel> travelList = travelRepository.findAllByUser(user);
 
@@ -90,11 +84,8 @@ public class TravelService {
     }
 
     public TravelReadResponse getTravel(Long travelId, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-        Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
+        User user = entityValidator.validateUserByEmail(email);
+        Travel travel = entityValidator.validateTravelById(travelId);
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
@@ -109,11 +100,8 @@ public class TravelService {
     }
 
     public void deleteTravel(Long travelId, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-
-        Travel travel = travelRepository.findById(travelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TRAVEL));
+        User user = entityValidator.validateUserByEmail(email);
+        Travel travel = entityValidator.validateTravelById(travelId);
 
         if (!travel.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
