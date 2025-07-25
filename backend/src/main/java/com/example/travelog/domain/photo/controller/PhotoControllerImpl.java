@@ -22,11 +22,14 @@ public class PhotoControllerImpl implements PhotoController {
     private final PhotoService photoService;
 
     @PostMapping(value = "/{travelId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createPhoto(@RequestPart("request") @Valid PhotoCreateRequest request,
-                                         @PathVariable Long travelId,
-                                         @RequestPart("image") MultipartFile image,
-                                         @AuthenticationPrincipal UserDetails userDetails) {
-        photoService.createPhoto(request, travelId, image, userDetails.getUsername());
+    public ResponseEntity<?> createPhoto(
+            @PathVariable Long travelId,
+            @RequestParam("comment") String comment,
+            @RequestParam("location") String location,
+            @RequestParam("image") MultipartFile image,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        photoService.createPhoto(comment, location, travelId, image, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
 

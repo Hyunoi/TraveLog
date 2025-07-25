@@ -28,7 +28,8 @@ public class PhotoService {
     private final EntityValidator entityValidator;
 
     @Transactional
-    public void createPhoto(PhotoCreateRequest request,
+    public void createPhoto(String comment,
+                            String location,
                             Long travelId,
                             MultipartFile image,
                             String email) {
@@ -40,8 +41,8 @@ public class PhotoService {
         Photo photo = Photo.builder()
                 .travel(travel)
                 .photoUrl(photoUrl)
-                .location(request.location())
-                .comment(request.comment())
+                .location(location)
+                .comment(comment)
                 .build();
 
         photoRepository.save(photo);

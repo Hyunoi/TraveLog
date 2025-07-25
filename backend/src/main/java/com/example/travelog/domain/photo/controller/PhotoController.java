@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +20,12 @@ import java.util.List;
 @Tag(name = "PHOTO")
 public interface PhotoController {
     @Operation(summary = "사진 생성")
-    public ResponseEntity<?> createPhoto(@Parameter(description = "코멘트, 장소(선택) 기입")
-                                         @RequestPart("request") @Valid PhotoCreateRequest request,
-                                         @PathVariable Long travelId,
-                                         @Parameter(description = "이미지 첨부")
-                                         @RequestPart("image") MultipartFile image,
+    public ResponseEntity<?> createPhoto(@PathVariable Long travelId,
+                                         @RequestParam("comment") String comment,
+                                         @RequestParam("location") String location,
+                                         @RequestParam("image") MultipartFile image,
                                          @AuthenticationPrincipal UserDetails userDetails);
+
 
     @Operation(summary = "사진 리스트 조회")
     public ResponseEntity<List<PhotoListReadResponse>> getPhotoList(@PathVariable Long travelId,
