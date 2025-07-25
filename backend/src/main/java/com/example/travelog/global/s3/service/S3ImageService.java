@@ -76,8 +76,8 @@ public class S3ImageService {
         InputStream is = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
 
-        ObjectMetadata metadata = new ObjectMetadata(); // 메타 데이터 생성
-        metadata.setContentType("image/" + extention);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(image.getContentType()); // ex: image/png
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
