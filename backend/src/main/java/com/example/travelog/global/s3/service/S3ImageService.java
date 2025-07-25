@@ -20,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -68,10 +70,14 @@ public class S3ImageService {
     // 이미지 메타데이터 생성 후 S3 업로드
     // 업로드 후에 Public Url 반환
     private String uploadImageToS3(MultipartFile image) throws IOException {
-        String originalFilename = image.getOriginalFilename(); //원본 파일 명
-        String extention = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
+        String originalFilename = image.getOriginalFilename(); // 원본 파일명
+        String extension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
 
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename; //변경된 파일 명
+        // 안전한 파일명 생성: UUID + "_" + 인코딩된 파일명
+        String encodedFilename = URLEncoder.encode(originalFilename, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20"); // 공백 → %20
+
+        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + "_" + encodedFilename;
 
         InputStream is = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
@@ -79,16 +85,17 @@ public class S3ImageService {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(image.getContentType()); // ex: image/png
         metadata.setContentLength(bytes.length);
+
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-        try{
+        try {
             PutObjectRequest putObjectRequest =
                     new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
                             .withCannedAcl(CannedAccessControlList.PublicRead);
-            amazonS3.putObject(putObjectRequest); // put image to S3
-        }catch (Exception e){
+            amazonS3.putObject(putObjectRequest);
+        } catch (Exception e) {
             throw new CustomException(ErrorCode.PUT_OBJECT_EXCEPTION);
-        }finally {
+        } finally {
             byteArrayInputStream.close();
             is.close();
         }
