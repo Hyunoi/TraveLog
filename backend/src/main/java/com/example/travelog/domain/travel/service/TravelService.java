@@ -66,6 +66,7 @@ public class TravelService {
 
         return travelList.stream()
                 .map(travel -> new TravelListReadResponse(
+                        travel.getId(),
                         travel.getTitle(),
                         travel.getLocation(),
                         travel.getThumbnailUrl()
