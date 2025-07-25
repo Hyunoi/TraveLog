@@ -56,8 +56,8 @@ public class PhotoService {
         return photoList.stream()
                 .map(photo -> new PhotoListReadResponse(
                         photo.getId(),
-                        photo.getComment(),
                         photo.getPhotoUrl(),
+                        photo.getComment(),
                         photo.getLocation(),
                         photo.getCreatedAt()
                 )).toList();
