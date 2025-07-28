@@ -12,7 +12,7 @@ import org.hibernate.annotations.Where;
 @AllArgsConstructor
 @Getter
 @Builder
-@SQLDelete(sql = "UPDATE travel SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE photo SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Photo extends BaseTimeEntity {
     @Id
