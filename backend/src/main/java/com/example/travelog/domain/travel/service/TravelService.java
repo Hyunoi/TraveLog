@@ -86,6 +86,7 @@ public class TravelService {
         );
     }
 
+    @Transactional
     public void deleteTravel(Long travelId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Travel travel = entityValidator.validateTravelById(travelId);

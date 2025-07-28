@@ -81,6 +81,7 @@ public class PhotoService {
         );
     }
 
+    @Transactional
     public void deletePhoto(Long photoId, String email) {
         User user = entityValidator.validateUserByEmail(email);
         Photo photo = entityValidator.validatePhotoById(photoId);
