@@ -30,8 +30,6 @@ public class Travel extends BaseTimeEntity {
     private String location;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private double latitude;
-    private double longitude;
     private String thumbnailUrl;
 
     public void updateTravel(String title,

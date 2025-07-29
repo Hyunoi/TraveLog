@@ -20,8 +20,5 @@ public record TravelCreateRequest(
         LocalDateTime startDate,
 
         @NotNull(message = "마감일은 필수 입력 값입니다.")
-        LocalDateTime endDate,
-
-        double latitude,
-        double longitude
+        LocalDateTime endDate
 ) { }

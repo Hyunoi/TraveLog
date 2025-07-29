@@ -30,8 +30,6 @@ public class TravelService {
                 .location(request.location())
                 .startTime(request.startDate())
                 .endTime(request.endDate())
-                .latitude(request.latitude())
-                .longitude(request.longitude())
                 .build();
 
         travelRepository.save(travel);
