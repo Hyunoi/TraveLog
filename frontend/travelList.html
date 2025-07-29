@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>여행 목록 - 트레블로그</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body class="p-4">
+<div class="container">
+    <h2 class="mb-4">✈️ 나의 여행 목록</h2>
+    <button class="btn btn-outline-danger mb-3" onclick="logout()">로그아웃</button>
+
+    <!-- 여행 등록 -->
+    <form id="createTravelForm" class="mb-5">
+        <div class="row g-2">
+            <div class="col-md-4"><input class="form-control" name="title" placeholder="여행 제목" required></div>
+            <div class="col-md-4"><input class="form-control" name="location" placeholder="장소" required></div>
+            <div class="col-md-4"><input class="form-control" name="description" placeholder="설명"></div>
+            <div class="col-md-6"><input class="form-control" name="startDate" type="datetime-local" required></div>
+            <div class="col-md-6"><input class="form-control" name="endDate" type="datetime-local" required></div>
+            <div class="col-md-6"><input class="form-control" name="latitude" placeholder="위도"></div>
+            <div class="col-md-6"><input class="form-control" name="longitude" placeholder="경도"></div>
+        </div>
+        <button class="btn btn-success mt-3">여행 추가</button>
+    </form>
+
+    <!-- 여행 목록 -->
+    <ul id="travelList" class="list-group"></ul>
+</div>
+
+<!-- ✏️ 설정 모달 -->
+<div id="settingModal" class="modal">
+    <div class="modal-content text-center p-4 rounded-4 border border-dark">
+        <h5 class="mb-4">여행 설정</h5>
+
+        <button class="btn btn-info w-100 mb-3" onclick="selectThumbnail()">여행 대표 사진 지정</button>
+        <button class="btn btn-info w-100 mb-3" onclick="openEditForm()">여행 수정</button>
+        <button class="btn btn-info w-100 mb-3" onclick="deleteTravel()">여행 삭제</button>
+        <button class="btn btn-outline-dark w-100" onclick="closeTravelModal()">닫기</button>
+    </div>
+</div>
+
+<!-- ✅ 여행 수정 모달 -->
+<div id="editModal" class="modal">
+    <div class="modal-content p-4">
+        <h5 class="mb-3">여행 수정</h5>
+        <form id="editForm">
+            <input type="text" name="title" class="form-control mb-2" placeholder="제목" required />
+            <input type="text" name="location" class="form-control mb-2" placeholder="장소" required />
+            <textarea name="description" class="form-control mb-2" placeholder="설명"></textarea>
+            <input type="datetime-local" name="startDate" class="form-control mb-2" required />
+            <input type="datetime-local" name="endDate" class="form-control mb-3" required />
+            <button class="btn btn-primary w-100 mb-2">수정</button>
+            <button type="button" class="btn btn-outline-dark w-100" onclick="closeEditModal()">취소</button>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ 삭제 확인 모달 -->
+<div id="deleteConfirmModal" class="modal">
+    <div class="modal-content text-center p-4">
+        <p class="mb-4">정말 삭제하시겠습니까?</p>
+        <button class="btn btn-danger w-100 mb-2" id="confirmDeleteBtn">삭제</button>
+        <button class="btn btn-outline-dark w-100" onclick="closeDeleteModal()">취소</button>
+    </div>
+</div>
+
+<script type="module" src="js/travelList.js"></script>
+</body>
+</html>
