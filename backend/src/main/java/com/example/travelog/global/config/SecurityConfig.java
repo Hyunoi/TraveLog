@@ -56,10 +56,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true); // 자격 증명 허용
-        configuration.addAllowedOrigin("http://localhost:3000"); // 프론트 주소
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*"); // 모든 origin 허용
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("Authorization"); // 응답 헤더에서 Authorization 노출
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
