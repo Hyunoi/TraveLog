@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record TravelCreateRequest(
         @NotBlank(message = "여행명은 필수 입력값입니다.")
@@ -17,8 +17,8 @@ public record TravelCreateRequest(
         String location,
 
         @NotNull(message = "시작일은 필수 입력 값입니다.")
-        LocalDateTime startDate,
+        LocalDate startDate,
 
         @NotNull(message = "마감일은 필수 입력 값입니다.")
-        LocalDateTime endDate
+        LocalDate endDate
 ) { }

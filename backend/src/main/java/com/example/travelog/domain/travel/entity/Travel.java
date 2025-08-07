@@ -7,7 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,18 +28,18 @@ public class Travel extends BaseTimeEntity {
     private String title;
     private String description;
     private String location;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String thumbnailUrl;
 
     public void updateTravel(String title,
                              String description,
-                             LocalDateTime startTime,
-                             LocalDateTime endTime) {
+                             LocalDate startDate,
+                             LocalDate endDate) {
         this.title = title;
         this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void updateThumbnailImage(String imageUrl) {

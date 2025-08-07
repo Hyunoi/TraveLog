@@ -30,6 +30,8 @@ public class TravelService {
                 .location(request.location())
                 .startTime(request.startDate())
                 .endTime(request.endDate())
+                .startDate(request.startDate())
+                .endDate(request.endDate())
                 .build();
 
         travelRepository.save(travel);
