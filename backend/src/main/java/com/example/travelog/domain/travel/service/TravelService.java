@@ -28,8 +28,6 @@ public class TravelService {
                 .title(request.title())
                 .description(request.description())
                 .location(request.location())
-                .startTime(request.startDate())
-                .endTime(request.endDate())
                 .startDate(request.startDate())
                 .endDate(request.endDate())
                 .build();
@@ -69,7 +67,9 @@ public class TravelService {
                         travel.getId(),
                         travel.getTitle(),
                         travel.getLocation(),
-                        travel.getThumbnailUrl()
+                        travel.getThumbnailUrl(),
+                        travel.getStartDate(),
+                        travel.getEndDate()
                 )).toList();
     }
 
